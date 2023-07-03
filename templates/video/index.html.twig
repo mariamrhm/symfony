@@ -1,0 +1,28 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <div class="video-container">
+        {% for video in videos %}
+            <article class="video-item">
+                
+                
+<p>{{ video.getTitle|u.truncate(20,'...',false) }}</p>
+               
+               <div class="video-wrapper">
+    <video width="300" height="200" controls>
+        <source src="{{ video.videoLink }}" type="video/mp4">
+        
+    </video>
+    
+</div>
+ <p>{{ video.description|u.truncate(25, '...', false) }}</p>
+                <p>Submitted {{ video.createdAt|ago }} ({{ video.createdAt|date('Y-m-d H:i:s') }})</p>
+                <a href="{{ path('app_video_show', {'id': video.id}) }}">Show Video</a>
+                <a href="{{ path('app_video_edit', {'id': video.id}) }}">Edit Video</a>
+                <a href="{{ path('app_video_delete', {'id': video.id}) }}">Delete Video</a>
+            </article>
+        {% else %}
+            <p>Sorry, no videos yet</p>
+        {% endfor %}
+    </div>
+{% endblock %}

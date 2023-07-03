@@ -1,0 +1,26 @@
+{% extends 'base.html.twig' %}
+{% block title %}{{ video.title }}{% endblock %}
+{% block body %}
+<article>
+<h1>{{ video.title }}</h1>
+
+<p>{{ video.description }}</p>
+{# <p>{{ video.getVideoLink}}</p>
+  <h1>{{ video.getVideoLink()}}</h1>  #}
+ {# <p>Submitted {{ video.createdAt|date }}</p>  #}
+{# <a href="{{ path('app_video_create') }}"> new video</a></li> 
+ <a href="{{ path('app_home') }}"> home</a></li>
+
+<h2><a href="{{ path('app_video_show', {id: video.id}) }}">{{ video.title }} </a></h2>
+
+
+ <p>Submitted {{ video.createdAt|ago }}</p>  #}
+
+ {# <a href="{{ path('app_video_show', {id: video.id}) }}">show | </a>
+
+<a href="{{ path('app_video_edit', {id: video.id}) }}">Edit Video | </a> #}
+
+</article>
+<a href="#">Edit</a>
+<a href="{{ path('app_home') }}">Go Back</a>
+{% endblock %}
