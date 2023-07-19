@@ -7,214 +7,207 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use App\Entity\Video;
 use App\Repository\VideoRepository;
+
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Component\HttpFoundation\Request;
 use Doctrine\ORM\EntityManagerInterface;
 use App\Form\VideoType;
+use Knp\Component\Pager\PaginatorInterface;
+use App\Form\UserFormType;
+use App\Entity\User;
+use Symfony\Component\Security\Core\Security;
 
-class VideoController extends AbstractController
-{
-    #[Route('/home', name: 'app_home')]
-    public function index(ManagerRegistry $doctrine, VideoRepository $repo): Response
+
+
+    class VideoController extends AbstractController
     {
-//       $video1 = new Video;
-// $video1->setTitle(" titre doit être limité à vingt character");
-// $video1->setDescription("Description Video 1");
-// $video1->setVideoLink('<iframe width="300" height="200" src="https://www.youtube.com/embed/lcZDWo6hiuI"></iframe>');
-
-// $video2 = new Video;
-// $video2->setTitle("Video 2");
-// $video2->setDescription("Description Video 2");
-// $video2->setVideoLink('<iframe width="560" height="315" src="https://www.youtube.com/embed/kmCAm4_hlyQ" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>');
-
-// $video3 = new Video;
-// $video3->setTitle("Video 3");
-// $video3->setDescription("Description Video 3");
-// $video3->setVideoLink('<iframe width="560" height="315" src="https://www.youtube.com/embed/coX4b3juSgM" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>');
-
-// $video4 = new Video;
-// $video4->setTitle("Video 4");
-// $video4->setDescription("Description Video 4");
-// $video4->setVideoLink('<iframe width="560" height="315" src="https://www.youtube.com/embed/Id7NcfkXLfU" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>');
-
-// $video5 = new Video;
-// $video5->setTitle("Video 5");
-// $video5->setDescription("Description Video 5");
-// $video5->setVideoLink('<iframe width="560" height="315" src="https://www.youtube.com/embed/video5" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>');
-
-// $video6 = new Video;
-// $video6->setTitle("Video 6");
-// $video6->setDescription("Description Video 6");
-// $video6->setVideoLink('<iframe width="560" height="315" src="https://www.youtube.com/embed/video6" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>');
-
-// $video7 = new Video;
-// $video7->setTitle("Video 7");
-// $video7->setDescription("Description Video 7");
-// $video7->setVideoLink('<iframe width="560" height="315" src="https://www.youtube.com/embed/video7" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>');
-
-// $video8 = new Video;
-// $video8->setTitle("Video 8");
-// $video8->setDescription("Description Video 8");
-// $video8->setVideoLink('<iframe width="560" height="315" src="https://www.youtube.com/embed/video8" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media;');
-//     $video9 = new Video;
-//     $video9->setTitle("Video 9");
-//     $video9->setDescription("Description Video 9");
-//     $video9->setVideoLink('<iframe width="560" height="315" src="https://www.youtube.com/embed/video9" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>');
-    
-//     $video10 = new Video;
-//     $video10->setTitle("Video 10");
-//     $video10->setDescription("Description Video 10");
-//     $video10->setVideoLink('<iframe width="560" height="315" src="https://www.youtube.com/embed/video10" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>');
-    
-//     $video11 = new Video;
-//     $video11->setTitle("Video 11");
-//     $video11->setDescription("Description Video 11");
-//     $video11->setVideoLink('<iframe width="560" height="315" src="https://www.youtube.com/embed/video11" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>');
-    
-//     $video12 = new Video;
-//     $video12->setTitle("Video 12");
-//     $video12->setDescription("Description Video 12");
-//     $video12->setVideoLink('<iframe width="560" height="315" src="https://www.youtube.com/embed/video12" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>');
-    
-//     $video13 = new Video;
-//     $video13->setTitle("Video 13");
-//     $video13->setDescription("Description Video 13");
-//     $video13->setVideoLink('<iframe width="560" height="315" src="https://www.youtube.com/embed/video13" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>');
-    
-//     $video14 = new Video;
-//     $video14->setTitle("Video 14");
-//     $video14->setDescription("Description Video 14");
-//     $video14->setVideoLink('<iframe width="560" height="315" src="https://www.youtube.com/embed/video14" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>');
-    
-//     $video15 = new Video;
-//     $video15->setTitle("Video 15");
-//     $video15->setDescription("Description Video 15");
-//     $video15->setVideoLink('<iframe width="560" height="315" src="https://www.youtube.com/embed/video15" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>');
-    
-//     $video16 = new Video;
-//     $video16->setTitle("Video 16");
-//     $video16->setDescription("Description Video 16");
-//     $video16->setVideoLink('<iframe width="560" height="315" src="https://www.youtube.com/embed/video16" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media;');
-//         $video17 = new Video;
-// $video17->setTitle("Video 17");
-// $video17->setDescription("Description Video 17");
-// $video17->setVideoLink('<iframe width="560" height="315" src="https://www.youtube.com/embed/video17" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>');
-
-// $video18 = new Video;
-// $video18->setTitle("Video 18");
-// $video18->setDescription("Description Video 18");
-// $video18->setVideoLink('<iframe width="560" height="315" src="https://www.youtube.com/embed/video18" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>');
-
-// $video19 = new Video;
-// $video19->setTitle("Video 19");
-// $video19->setDescription("Description Video 19");
-// $video19->setVideoLink('<iframe width="560" height="315" src="https://www.youtube.com/embed/video19" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>');
-
-// $video20 = new Video;
-// $video20->setTitle("Video 20");
-// $video20->setDescription("Description Video 20");
-// $video20->setVideoLink('<iframe width="560" height="315" src="https://www.youtube.com/embed/video20" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>');
-
-// $em = $doctrine->getManager();
-// $em->persist($video1);
-// $em->persist($video2);
-// $em->persist($video3);
-// $em->persist($video4);
-// $em->persist($video5);
-// $em->persist($video6);
-// $em->persist($video7);
-// $em->persist($video8);
-// $em->persist($video9);
-// $em->persist($video10);
-// $em->persist($video11);
-// $em->persist($video12);
-// $em->persist($video13);
-// $em->persist($video14);
-// $em->persist($video15);
-// $em->persist($video16);
-// $em->persist($video17);
-// $em->persist($video18);
-// $em->persist($video19);
-// $em->persist($video20);
-
-// $em->flush();
-
-    
-
-
-// $em = $doctrine->getManager();
-// $em->persist($video1);
-// $em->persist($video2);
-// $em->persist($video3);
-// $em->persist($video4);
-
-
-// $em->flush();
-
-
-
-        // return $this->render('video/index.html.twig', [
-        //     'controller_name' => 'VideoController',
-        //     'videos' => $videos, // Passez les vidéos au modèle Twig
+      
+            #[Route('/home', name: 'app_home')]
+            public function index(Request $request, PaginatorInterface $paginator, VideoRepository $videoRepository): Response
+            {
+                
         
-        return $this->render('video/index.html.twig', ['videos' => $repo->findAll()]);
-        // ]);
-    }
+                $pagination = $paginator->paginate(
+                    $videoRepository->paginationQuery(),
+                    $request->query->getInt('page', 1),
+                    9
+                );
+                
+            
+                
+        
+                return $this->render('video/index.html.twig', [
+                 
+                    'pagination' => $pagination
+                ]);
+            }
+        
+        
+    
+    
 
 
 
+    
+    
+  
 
-    #[Route('/video/create', name:'app_video_create', methods: ['GET', 'POST'])]
+    #[Route('/video/creer', name: 'app_video_create', methods: ['GET', 'POST'])]
     public function create(Request $request, EntityManagerInterface $em): Response
     {
-        $video = new Video;
+       
+        if (!$this->getUser()) {
+            $this->addFlash('error', 'Vous devez vous connecter pour créer une vidéo !');
+            return $this->redirectToRoute('app_login');
+        }
+    
+        $video = new Video();
         $form = $this->createForm(VideoType::class, $video);
         $form->handleRequest($request);
-        
+    
         if ($form->isSubmitted() && $form->isValid()) {
+           
+            $videoLink = $form->get('videoLink')->getData();
+           
+            $video->setUser($this->getUser());
+    
             $em->persist($video);
             $em->flush();
-            $this->addFlash('success', 'Video successfully created!');
+    
+            $this->addFlash('success', 'Vidéo créée avec succès !');
             return $this->redirectToRoute('app_home');
         }
-
-        return $this->render('video/create.html.twig', ['form' => $form->createView()]);
+    
+        return $this->render('video/create.html.twig', [
+            'form' => $form->createView(),
+        ]);
     }
 
-    
-    #[Route("/video/{id<[0-9]+>}/edit", name:"app_video_edit", methods:["GET","POST"])]
 
+    #[Route("/video/{id<[0-9]+>}/modifier", name:"app_video_edit", methods:["GET","POST"])]
     public function edit(Request $request, Video $video, EntityManagerInterface $em): Response
     {
+        if ($this->getUser()) {
+            if ($this->getUser()->isVerified() == false) {
+                $this->addFlash('error', 'Vous devez confirmer votre e-mail pour modifier la vidéo !');
+                return $this->redirectToRoute('app_home');
+            } else if ($video->getUser()->getEmail() !== $this->getUser()->getEmail()) {
+                $this->addFlash('error', 'Vous devez être l\'utilisateur ' . $video->getUser()->getFirstname() . ' pour modifier la vidéo !');
+                return $this->redirectToRoute('app_home');
+            }
+        } else {
+            $this->addFlash('error', 'Vous devez vous connecter pour modifier la vidéo !');
+            return $this->redirectToRoute('app_login');
+        }
+
         $form = $this->createForm(VideoType::class, $video);
         $form->handleRequest($request);
-        
+
         if ($form->isSubmitted() && $form->isValid()) {
             $em->flush();
-            $this->addFlash('success', 'Video successfully edited!');
+            $video->setUser($this->getUser());
+            $this->addFlash('success', 'Vidéo modifiée avec succès !');
             return $this->redirectToRoute('app_home');
         }
-        
+
         return $this->render('video/edit.html.twig', [
             'video' => $video,
             'form' => $form->createView()
         ]);
     }
 
-    
-    #[Route("/video/{id<[0-9]+>}/delete", name:"app_video_delete")]
-
+    #[Route("/video/{id<[0-9]+>}/supprimer", name:"app_video_delete")]
     public function delete(Video $video, EntityManagerInterface $em): Response
     {
+        if ($this->getUser()) {
+            if ($this->getUser()->isVerified() == false) {
+                $this->addFlash('error', 'Vous devez confirmer votre e-mail pour supprimer la vidéo !');
+                return $this->redirectToRoute('app_home');
+            } else if ($video->getUser()->getEmail() !== $this->getUser()->getEmail()) {
+                $this->addFlash('error', 'Vous devez être l\'utilisateur ' . $video->getUser()->getFirstname() . ' pour supprimer la vidéo !');
+                return $this->redirectToRoute('app_home');
+            }
+        } else {
+            $this->addFlash('error', 'Vous devez vous connecter pour supprimer la vidéo !');
+            return $this->redirectToRoute('app_login');
+        }
+
         $em->remove($video);
         $em->flush();
-        $this->addFlash('success', 'Video successfully deleted!');
+        $this->addFlash('success', 'Vidéo supprimée avec succès !');
         return $this->redirectToRoute('app_home');
     }
 
     #[Route('/video/{id<[0-9]+>}/show', name: 'app_video_show', methods: ['GET'])]
     public function show(Video $video): Response
     {
+        if ($video->isPremiumVideo() && !$this->getUser()) {
+            $this->addFlash('error', 'Vous devez vous connecter ou vous inscrire pour avoir accès  aux vidéos premiums.');
+            return $this->redirectToRoute('app_login');
+        }
+    
         return $this->render('video/show.html.twig', compact('video'));
     }
+    
+    #[Route('/video/{id<[0-9]+>}/profil', name: 'app_video_profile', methods: ['GET', 'POST'])]
+    public function editProfile(Request $request, EntityManagerInterface $entityManager): Response
+    {
+        $user = $this->getUser();
+
+        $form = $this->createForm(UserFormType::class, $user);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+      
+            $entityManager->persist($user);
+            $entityManager->flush();
+
+            $this->addFlash('success', 'Photo de profil téléchargée avec succès.');
+
+            return $this->redirectToRoute('app_home');
+        }
+
+        return $this->render('video/profile.html.twig', [
+            'form' => $form->createView(),
+            'user' => $user,
+            'submitButtonText' => 'Mettre à jour la vidéo',
+        ]);
+    }
+
+    #[Route('/video/update', name: 'app_video_update', methods: ['GET', 'POST'])]
+    public function updateProfile(Request $request): Response
+    {
+        // Get the current user
+        $user = $this->getUser();
+
+        // Create the form for updating the profile
+        $form = $this->createForm(UserFormType::class, $user);
+
+        // Handle the form submission
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+            // Save the updated profile to the database
+            $entityManager = $this->getDoctrine()->getManager();
+            $entityManager->flush();
+
+            // Optionally, add a success message
+            $this->addFlash('success', 'Profile updated successfully!');
+
+            // Redirect to another page after updating the profile
+            return $this->redirectToRoute('home'); // Replace 'home' with the route name of your desired page
+        }
+
+        // Render the update.html.twig template with the profile form
+        return $this->render('video/update.html.twig', [
+            'form' => $form->createView(),
+        ]);
+    }
+
+    // ...
 }
+
+
+
+
+
+

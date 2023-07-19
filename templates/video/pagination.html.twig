@@ -1,0 +1,17 @@
+<div class="pagination">
+    {% if pagination.hasPreviousPage %}
+        <a href="{{ pagination.previousPageLink }}" class="previous">Vorige</a>
+    {% endif %}
+
+    {% for page in pagination.pagesInRange %}
+        {% if page == pagination.currentPage %}
+            <span class="current">{{ page }}</span>
+        {% else %}
+            <a href="{{ pagination.pageLink(page) }}">{{ page }}</a>
+        {% endif %}
+    {% endfor %}
+
+    {% if pagination.hasNextPage %}
+        <a href="{{ pagination.nextPageLink }}" class="next">Volgende</a>
+    {% endif %}
+</div>

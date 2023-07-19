@@ -1,26 +1,71 @@
 {% extends 'base.html.twig' %}
-{% block title %}{{ video.title }}{% endblock %}
+
+{% block title %}
+    {{ video.title }}
+{% endblock %}
+
+{% block stylesheets %}
+    <style>
+      .video-show {
+           position: relative;
+    width: 800PX;
+    height:480PX;
+    padding-bottom: 56.25%;
+    margin-bottom: 10px;
+    overflow: hidden;
+     margin-top: 100px;
+        }
+
+        .video-show iframe {
+            position: absolute;
+    top: 0;
+    left: 0;
+    width: 640PX;
+    height: 480PX;
+      margin-left: 200px; 
+        }
+
+        {# .video-wrapper {
+    position: relative;
+    width: 100%;
+    padding-bottom: 56.25%;
+    margin-bottom: 10px;
+    overflow: hidden;
+}
+
+.video-wrapper iframe {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+} #}
+    </style>
+{% endblock %}
+
 {% block body %}
 <article>
-<h1>{{ video.title }}</h1>
+    <h1>{{ video.title }}</h1>
+    
+     <div class="video-show">
+                        {{ video.getVideoLink|raw }}
+                    </div>
 
-<p>{{ video.description }}</p>
-{# <p>{{ video.getVideoLink}}</p>
-  <h1>{{ video.getVideoLink()}}</h1>  #}
- {# <p>Submitted {{ video.createdAt|date }}</p>  #}
-{# <a href="{{ path('app_video_create') }}"> new video</a></li> 
- <a href="{{ path('app_home') }}"> home</a></li>
+                    {% if video.getVideoLink starts with 'https://www.youtube.com/' %}
+                        <div class="video-show">
+                            <iframe src="{{ video.getVideoLink }}" width="300" height="200" frameborder="0" allowfullscreen></iframe>
+                        </div>
+                    {% endif %}
 
-<h2><a href="{{ path('app_video_show', {id: video.id}) }}">{{ video.title }} </a></h2>
-
-
- <p>Submitted {{ video.createdAt|ago }}</p>  #}
-
- {# <a href="{{ path('app_video_show', {id: video.id}) }}">show | </a>
-
-<a href="{{ path('app_video_edit', {id: video.id}) }}">Edit Video | </a> #}
-
+        
+    <p>{{ video.description }}</p>
+    <p class="submitted-date">Submitted {{ video.createdAt|date }}</p>
+    
+    <div class="video-actions">
+        <a href="{{ path('app_video_edit', {'id': video.id}) }}">Edit Video</a>
+        <a href="{{ path('app_video_create', {'id': video.id}) }}">Create Video</a>
+        <a href="{{ path('app_video_show', {'id': video.id}) }}">Show Video</a>
+        <a href="{{ path('app_video_delete', {'id': video.id}) }}">Delete Video</a>
+    </div>
 </article>
-<a href="#">Edit</a>
-<a href="{{ path('app_home') }}">Go Back</a>
 {% endblock %}

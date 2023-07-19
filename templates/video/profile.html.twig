@@ -1,0 +1,119 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+    Profil
+{% endblock %}
+
+{% block stylesheets %}
+    <style>
+        .premium-videos .video-container {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            grid-gap: 20px;
+        }
+
+        .video-item:nth-child(3n+1) {
+            grid-column: 1;
+            grid-row: span 2;
+        }
+
+        .video-item:nth-child(3n+2) {
+            grid-column: 2;
+            grid-row: span 2;
+        }
+
+        .video-item:nth-child(3n) {
+            grid-column: 3;
+            grid-row: span 2;
+        }
+
+        .video-item.empty {
+            visibility: hidden;
+        }
+    </style>
+{% endblock %}
+
+{% block body %}
+<div class="profile-card">
+    <div class="profile">
+        <h2>Profil</h2>
+        {% if app.user and app.user.getImageName() %}
+            <div class="profile-image">
+                <img src="{{ vich_uploader_asset(app.user, 'imageFile') }}" alt="Profilbild">
+            </div>
+        {% else %}
+            <p class="no-profile-image">Aucune photo de profil disponible.</p>
+        {% endif %}
+        <table class="profile-table">
+            <tr>
+                <th>Email</th>
+                <td>{% if app.user %}{{ app.user.email }}{% endif %}</td>
+            </tr>
+            <tr>
+                <th>Rôles</th>
+                <td>{% if app.user and app.user.roles is iterable %}{{ app.user.roles|join(', ') }}{% endif %}</td>
+            </tr>
+            <tr>
+                <th>Mot de passe</th>
+                <td>{% if app.user %}{{ app.user.password }}{% endif %}</td>
+            </tr>
+            <tr>
+                <th>Est vérifié</th>
+                <td>{% if app.user %}{{ app.user.isVerified ? 'Oui' : 'Non' }}{% endif %}</td>
+            </tr>
+            <tr>
+                <th>Prénom</th>
+                <td>{% if app.user %}{{ app.user.firstname }}{% endif %}</td>
+            </tr>
+            <tr>
+                <th>Nom</th>
+                <td>{% if app.user %}{{ app.user.lastname }}{% endif %}</td>
+            </tr>
+            <tr>
+                <th>Image</th>
+                <td>{% if app.user %}{{ app.user.imageFile }}{% endif %}</td>
+            </tr>
+        </table>
+
+<a href="{{ path('app_video_update') }}">Update Profil</a>
+
+    </div>
+</div>
+
+<div class="premium-videos">
+    <h2>Vos vidéos premium</h2>
+    <div class="video-container">
+        {% if app.user and app.user.videos is iterable %}
+            {% set videoCount = app.user.videos|length %}
+            {% set rows = (videoCount / 3)|round(0, 'ceil') %}
+            {% for i in 1..(rows*3) %}
+                {% set videoIndex = i - 1 %}
+                {% if videoIndex < videoCount %}
+                    {% set video = app.user.videos[videoIndex] %}
+                    <div class="video-item">
+                        <h3 class="video-title">
+                            <a href="{{ path('app_video_show', {'id': video.id}) }}">{{ video.getTitle }}</a>
+                        </h3>
+                        <p class="submitted-date">Soumis le {{ video.createdAt|date }}</p>
+                        <div class="video-wrapper">
+                            {{ video.getVideoLink|raw }}
+                        </div>
+                        <p>{{ video.description|u.truncate(25, '...', false) }}</p>
+                        <div class="video-actions">
+                            <a href="{{ path('app_video_show', {'id': video.id}) }}">Voir la vidéo</a>
+                            <a href="{{ path('app_video_create', {'id': video.id}) }}">Créer une vidéo</a>
+                            <a href="{{ path('app_video_delete', {'id': video.id}) }}">Supprimer la vidéo</a>
+                            <a href="{{ path('app_video_edit', {'id': video.id}) }}">Modifier la vidéo</a>
+                        </div>
+                    </div>
+                {% else %}
+                    <div class="video-item empty"></div>
+                {% endif %}
+            {% endfor %}
+        {% else %}
+            <p>Aucune vidéo premium disponible</p>
+        {% endif %}
+    </div>
+</div>
+
+{% endblock %}

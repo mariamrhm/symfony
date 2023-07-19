@@ -13,10 +13,14 @@
 
         {% if app.user is not null %}
           <li class="nav-item">
-            <a class="nav-link" href="https://127.0.0.1:8000/video/create">Create Pin</a>
+             <a class="nav-link" href="{{ path('app_video_create', { 'id': app.user.id }) }}">create video</a>
           </li>
+          
           <li class="nav-item">
             <a class="nav-link" href="{{ path('app_logout') }}">Logout</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="{{ path('app_video_profile', { 'id': app.user.id }) }}">Profile</a>
           </li>
         {% else %}
           <li class="nav-item">
@@ -24,6 +28,9 @@
           </li>
           <li class="nav-item">
             <a class="nav-link" href="{{ path('app_login') }}">Login</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="{{ path('app_video_profile', { 'id': 1 }) }}">Profile</a>
           </li>
         {% endif %}
       </ul>

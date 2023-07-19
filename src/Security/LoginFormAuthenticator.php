@@ -42,16 +42,18 @@ class LoginFormAuthenticator extends AbstractLoginFormAuthenticator
 
     public function onAuthenticationSuccess(Request $request, TokenInterface $token, string $firewallName): ?Response
     {
+        $request->getSession()->getFlashBag()->add('success', 'Welcome ' . 
+$token->getUser()->getFirstname() . ' !');
+
         if ($targetPath = $this->getTargetPath($request->getSession(), $firewallName)) {
             return new RedirectResponse($targetPath);
         }
-    
-        return new RedirectResponse($this->urlGenerator->generate('app_home'));
-    
-    
 
-        // For example:
-        // return new RedirectResponse($this->urlGenerator->generate('some_route'));
+        $user = $token->getUser();
+        if ($user) {
+            return new RedirectResponse($this->urlGenerator->generate('app_video_profile', ['id' => $user->getId()]));
+        }
+
         throw new \Exception('TODO: provide a valid redirect inside '.__FILE__);
     }
 

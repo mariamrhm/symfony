@@ -2,27 +2,98 @@
 
 {% block body %}
     <div class="video-container">
-        {% for video in videos %}
-            <article class="video-item">
-                
-                
-<p>{{ video.getTitle|u.truncate(20,'...',false) }}</p>
+        {% for video in pagination %}
+            {% if app.user %}
+                <article class="video-item">
+                    <h3 class="video-title">
                
-               <div class="video-wrapper">
-    <video width="300" height="200" controls>
-        <source src="{{ video.videoLink }}" type="video/mp4">
-        
-    </video>
-    
-</div>
- <p>{{ video.description|u.truncate(25, '...', false) }}</p>
-                <p>Submitted {{ video.createdAt|ago }} ({{ video.createdAt|date('Y-m-d H:i:s') }})</p>
-                <a href="{{ path('app_video_show', {'id': video.id}) }}">Show Video</a>
-                <a href="{{ path('app_video_edit', {'id': video.id}) }}">Edit Video</a>
-                <a href="{{ path('app_video_delete', {'id': video.id}) }}">Delete Video</a>
-            </article>
+                        <a href="{{ path('app_video_show', {'id': video.id}) }}">{{ video.getTitle }}</a>
+                    </h3>
+                    <div class="video-wrapper">
+                        {{ video.getVideoLink|raw }}
+                    </div>
+
+                    {% if video.getVideoLink starts with 'https://www.youtube.com/' %}
+                        <div class="video-wrapper">
+                            <iframe src="{{ video.getVideoLink }}" width="300" height="200" frameborder="0" allowfullscreen></iframe>
+                        </div>
+                    {% endif %}
+
+                    {% if video.isPremiumVideo %}
+                        <p class="video-type">Premium video</p>
+                        <p class="video-info">Created by: {{ video.getUser.email }}</p>
+                        <p class="submitted-date">Submitted {{ video.createdAt|date }}</p>
+                    {% else %}
+                        <p class="video-type" style="color: red;">Non-Premium video</p>
+                        <div class="video-info">
+                            <p>Email: {{ video.getUser.email }}</p>
+                            <p>Submitted: {{ video.createdAt|date }}</p>
+                        </div>
+                    {% endif %}
+
+                    <div class="video-actions">
+                        <a href="{{ path('app_video_show', {'id': video.id}) }}">Show Video</a>
+                        <a href="{{ path('app_video_delete', {'id': video.id}) }}">Delete Video</a>
+                    </div>
+                </article>
+            {% else %}
+                <article class="video-item">
+                    <h3>{{ video.getTitle }}</h3>
+                    <div class="video-wrapper">
+                        {{ video.getVideoLink|raw }}
+                    </div>
+
+                    {% if video.getVideoLink starts with 'https://www.youtube.com/' %}
+                        <div class="video-wrapper">
+                            <iframe src="{{ video.getVideoLink }}" width="300" height="200" frameborder="0" allowfullscreen></iframe>
+                        </div>
+                    {% endif %}
+
+                    <p class="video-type" style="color: red;">Non-Premium video</p>
+                    <div class="video-info">
+                        <p>Email: {{ video.getUser.email }}</p>
+                        <p>Submitted: {{ video.createdAt|date }}</p>
+                    </div>
+
+                    <div class="video-actions">
+                        <a href="{{ path('app_video_show', {'id': video.id}) }}">Show Video</a>
+                        <a href="{{ path('app_video_delete', {'id': video.id}) }}">Delete Video</a>
+                    </div>
+                </article>
+            {% endif %}
         {% else %}
             <p>Sorry, no videos yet</p>
         {% endfor %}
+    </div>
+
+    <div class="pagination justify-content-center">
+        <ul class="pagination">
+            {% if pagination.getCurrentPageNumber() > 1 %}
+                <li class="page-item">
+                    <a class="page-link" href="{{ path(app.request.attributes.get('_route'), app.request.query.all|merge({'page': pagination.getCurrentPageNumber() - 1})) }}">Precedant</a>
+                </li>
+            {% endif %}
+
+            {% set paginationData = pagination.getPaginationData() %}
+            {% set totalPages = paginationData['pageCount'] %}
+
+            {% for page in 1..totalPages %}
+                {% if page == pagination.getCurrentPageNumber() %}
+                    <li class="page-item active">
+                        <span class="page-link">{{ page }}</span>
+                    </li>
+                {% else %}
+                    <li class="page-item">
+                        <a class="page-link" href="{{ path(app.request.attributes.get('_route'), app.request.query.all|merge({'page': page})) }}">{{ page }}</a>
+                    </li>
+                {% endif %}
+            {% endfor %}
+
+            {% if pagination.getCurrentPageNumber() < totalPages %}
+                <li class="page-item">
+                    <a class="page-link" href="{{ path(app.request.attributes.get('_route'), app.request.query.all|merge({'page': pagination.getCurrentPageNumber() + 1})) }}">prochain</a>
+                </li>
+            {% endif %}
+        </ul>
     </div>
 {% endblock %}

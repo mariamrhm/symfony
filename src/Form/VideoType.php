@@ -6,10 +6,8 @@ use App\Entity\Video;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
-use App\Form\VideoType;
-use Symfony\Component\HttpFoundation\Request;
-use Doctrine\ORM\EntityManagerInterface;
-
+use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
+use Symfony\Component\Form\Extension\Core\Type\UrlType;
 
 class VideoType extends AbstractType
 {
@@ -18,7 +16,13 @@ class VideoType extends AbstractType
         $builder
             ->add('title')
             ->add('description')
-        ;
+            ->add('videoLink', UrlType::class, [
+                'label' => 'Video URL',
+            ])
+            ->add('premiumVideo', CheckboxType::class, [
+                'label' => 'Premium video',
+                'required' => false,
+            ]);
     }
 
     public function configureOptions(OptionsResolver $resolver): void
